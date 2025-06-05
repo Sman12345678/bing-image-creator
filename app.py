@@ -212,7 +212,7 @@ def save_base64_images(base64_list):
         path = os.path.join(TEMP_IMAGE_DIR, f"{file_id}.png")
         with open(path, "wb") as f:
             f.write(img_data)
-        saved.append({"url": f"{RENDER_URL}/serve-image/{file_id}"})
+        saved.append({"url": f"/serve-image/{file_id}"})
         logging.info(f"✅ Image saved: {path}")
     return saved
 
