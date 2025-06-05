@@ -44,7 +44,9 @@ API_KEYS = [
 ]
 
 ADMIN_CODE = "ICU14CU"
-
+RENDER_URL = os.getenv("RENDER_EXTERNAL_URL", "http://localhost:10000")
+if RENDER_URL.endswith('/'):
+    RENDER_URL = RENDER_URL[:-1]
 chrome_bin = os.environ.get("CHROME_BIN", "/usr/bin/chromium")
 chromedriver_bin = os.environ.get("CHROMEDRIVER_BIN", "/usr/bin/chromedriver")
 
@@ -210,7 +212,7 @@ def save_base64_images(base64_list):
         path = os.path.join(TEMP_IMAGE_DIR, f"{file_id}.png")
         with open(path, "wb") as f:
             f.write(img_data)
-        saved.append({"url": f"/serve-image/{file_id}"})
+        saved.append({"url": f"{RENDER_URL}/serve-image/{file_id}"})
         logging.info(f"✅ Image saved: {path}")
     return saved
 
