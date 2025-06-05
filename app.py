@@ -72,7 +72,7 @@ def login_once(email, password):
         logged_in = True
 
 def take_screenshot_in_memory(driver):
-    screenshot_png = driver.get_screenshot_as_png()
+    screenshot_png = driver.get_full_page_screenshot_as_png()
     logging.info("📸 Screenshot captured in memory.")
     return screenshot_png
 
