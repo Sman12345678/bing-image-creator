@@ -123,7 +123,7 @@ def login_to_bing(driver, email, password):
         logging.info("===Navigated To Main Page===")
         driver.get("https://bing.com/images/create")
         WebDriverWait(driver, 20).until(
-           EC.presence_of_element_located((By.ID, "sb_form_q"))
+           EC.presence_of_element_located((By.ID, "gi_form_q"))
         )
         take_screenshot_in_memory(driver)
     except Exception as e:
@@ -138,12 +138,12 @@ def generate_images(driver, prompt):
             logging.warning("⚠️ Wrong page! Redirecting to Bing Create...")
             driver.get("https://www.bing.com/images/create")
             WebDriverWait(driver, 20).until(
-                EC.presence_of_element_located((By.ID, "sb_form_q"))
+                EC.presence_of_element_located((By.ID, "gi_form_q"))
             )
 
         # 🖊️ Type prompt
         logging.info("🖊️ Typing prompt...")
-        textarea = driver.find_element(By.ID, "sb_form_q")
+        textarea = driver.find_element(By.ID, "gi_form_q")
         textarea.clear()
         textarea.send_keys(prompt)
         logging.info("✅ Prompt typed!")
