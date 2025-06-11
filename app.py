@@ -72,9 +72,24 @@ def login_once(email, password):
         logged_in = True
 
 def take_screenshot_in_memory(driver):
-    screenshot_png = driver.get_full_page_screenshot_as_png()
-    logging.info("📸 Screenshot captured in memory.")
-    return screenshot_png
+    try:
+        logging.info("📸 Capturing full-page screenshot using CDP...")
+        metrics = driver.execute_cdp_cmd("Page.getLayoutMetrics", {})
+        width = metrics["contentSize"]["width"]
+        height = metrics["contentSize"]["height"]
+        
+        # Set the viewport to full height
+        driver.set_window_size(width, height)
+        
+        screenshot_data = driver.execute_cdp_cmd("Page.captureScreenshot", {
+            "fromSurface": True,
+            "captureBeyondViewport": True
+        })
+        screenshot_png = base64.b64decode(screenshot_data["data"])
+        return screenshot_png
+    except Exception as e:
+        logging.error(f"❌ Failed to capture full-page screenshot: {e}")
+        raise
 
 def login_to_bing(driver, email, password):
     try:
