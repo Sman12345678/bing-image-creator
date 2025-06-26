@@ -43,6 +43,62 @@ API_KEYS = [
     "sman-apiT6U7V8W9X0"
 ]
 
+#=====BAD PROMPTS=======#
+bad_words = [
+    # 🔞 SEXUAL / EXPLICIT
+    "sex", "porn", "porno", "pornography", "nude", "nudity", "boobs", "tits", "breasts",
+    "vagina", "pussy", "dick", "cock", "penis", "cum", "clit", "orgasm", "blowjob",
+    "handjob", "masturbate", "masturbation", "anal", "anus", "butthole", "suck",
+    "slut", "whore", "hoe", "bitch", "milf", "hentai", "bdsm", "xxx", "deepthroat",
+    "fingering", "fuck", "fucked", "fucker", "fucking", "lick", "licking", "horny",
+    "erotic", "rape", "rapist", "incest", "molest", "molester", "ejaculate", "ejaculation",
+
+    # 💀 VIOLENT / HARMFUL
+    "kill", "murder", "assassinate", "slaughter", "stab", "shoot", "gun", "bomb",
+    "explosive", "terror", "terrorist", "suicide", "hang", "cut", "slice",
+    "harm", "abuse", "torture", "die", "dead", "corpse", "blood", "explode", "burn",
+    "lynch", "strangle", "suffocate", "decapitate", "execute", "sacrifice", "fight",
+    "fighting", "behead", "violence", "poison", "selfharm", "overdose", "slit",
+    "kidnap", "hostage", "bludgeon", "chainsaw", "genocide", "killself",
+
+    # 🧠 MENTAL HEALTH / SELF-HARM
+    "depress", "depressed", "depression", "anxiety", "panic", "kill myself",
+    "want to die", "suicidal", "selfharm", "cutting", "hurt myself", "overdose",
+    "hate myself", "i'm worthless", "i want to disappear", "burn myself",
+    "jump off", "kill me", "i'm done", "slit wrists", "end my life",
+
+    # 🧑‍⚖️ CRIME / ILLEGAL
+    "steal", "thief", "rob", "robbery", "scam", "fraud", "cheat", "piracy", "pirate",
+    "forgery", "fake id", "counterfeit", "hack", "hacker", "phishing", "blackmail",
+    "drug", "cocaine", "meth", "weed", "heroin", "marijuana", "smuggle", "bribe",
+    "extort", "kidnap", "traffick", "prostitute", "illegal", "sell organs", "assault",
+    "arson", "embezzle",
+
+    # 🤬 INSULTS / HATE / SLURS
+    "idiot", "stupid", "dumb", "moron", "retard", "retarded", "loser", "fatass",
+    "ugly", "bastard", "douche", "fuckface", "shitface", "asshole", "jerk", "motherfucker",
+    "cunt", "fag", "faggot", "tranny", "nigger", "nigga", "kike", "chink", "spic",
+    "wetback", "sandnigger", "towelhead", "gypsy", "coon", "gook", "paki", "whore",
+    "hoe", "slut", "bitch", "dickhead", "gay", "die", "kill yourself",
+
+    # 👿 RELIGIOUS / POLITICAL EXTREMISM
+    "allah is", "kill infidels", "burn church", "bomb mosque", "convert or die",
+    "zionist pig", "anti-semitic", "crusade", "jihad", "infidel", "heathen", "satanist",
+    "nazi", "hitler", "kkk", "white power", "islamophobic", "homophobic", "god hates",
+    "burn bible", "destroy quran",
+
+    # 💩 OTHER OFFENSIVE / TROLLING
+    "poop", "shit", "piss", "pee", "crap", "fart", "suck", "balls", "screw you",
+    "hell", "damn", "goddamn", "wtf", "stfu", "kys", "lmao", "lmfao", "omfg",
+    "nudes", "send nudes", "noob", "rekt", "loser", "trash", "garbage",
+
+    # ⚙️ DARKNET / CYBERCRIME
+    "tor", "darkweb", "deepweb", "0day", "exploit", "keylogger", "rootkit",
+    "rat", "malware", "virus", "trojan", "payload", "ransomware", "ddos",
+    "bruteforce", "hydra", "proxychain", "sqlmap", "credit card", "cc dump"
+]
+
+
 ADMIN_CODE = "ICU14CU"
 RENDER_URL = os.getenv("RENDER_EXTERNAL_URL", "http://localhost:10000")
 if RENDER_URL.endswith('/'):
