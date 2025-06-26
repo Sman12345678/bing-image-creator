@@ -320,7 +320,7 @@ def generate():
             return jsonify({"error": "Missing prompt."}), 400
 
         # ✳️ Check for bad words using regex + word list
-        bad = prompt_contains_bad_word(prompt)
+        bad = prompt_blocker(prompt)
         if bad:
             return jsonify({
                 "error": "Prompt rejected: contains offensive or harmful content.",
