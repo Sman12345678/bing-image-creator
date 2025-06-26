@@ -15,7 +15,9 @@ import random
 import uuid
 import traceback
 from dotenv import load_dotenv
+import re
 from io import BytesIO
+
 
 load_dotenv()
 
@@ -126,6 +128,15 @@ def login_once(email, password):
     if not logged_in:
         login_to_bing(driver, email, password)
         logged_in = True
+
+
+def prompt_blocker(prompt):
+    prompt = prompt.lower()
+    for word in bad_words:
+        pattern = rf"\b{re.escape(word)}\b"
+        if re.search(pattern, prompt):
+            return word  # Return the first word it finds
+    return None
 
 def take_screenshot_in_memory(driver):
     try:
@@ -293,32 +304,32 @@ generation_lock = Lock()
 
 @app.route("/api/gen", methods=["GET", "POST"])
 def generate():
-    # Acquire the lock (non-blocking)
     if not generation_lock.acquire(blocking=False):
         return jsonify({"error": "Another image generation is in progress. Please wait."}), 429
 
     try:
-        # Choose the source: args for GET, json for POST
         is_json = request.is_json and request.method == "POST"
         source = request.args if request.method == "GET" else (request.get_json() or {})
 
-        # Get API key
         api_key = source.get("api_key")
         if not api_key or api_key not in API_KEYS:
             return jsonify({"error": "Invalid or missing API key."}), 401
 
-        # Get prompt
         prompt = source.get("prompt")
         if not prompt:
             return jsonify({"error": "Missing prompt."}), 400
 
-        # Generate images
+        # ✳️ Check for bad words using regex + word list
+        bad = prompt_contains_bad_word(prompt)
+        if bad:
+            return jsonify({
+                "error": "Prompt rejected: contains offensive or harmful content.",
+                "blocked_word": bad
+            }), 400
+
+        # ✅ Proceed with image generation
         base64_images = generate_images(driver, prompt)
-
-        # Limit to 4 unique images
         base64_images = list(dict.fromkeys(base64_images))[:4]
-
-        # Save images to disk
         saved = save_base64_images(base64_images)
 
         logging.info(f"✅ Generated and saved {len(saved)} images for prompt: {prompt}")
