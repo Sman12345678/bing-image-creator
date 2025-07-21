@@ -194,7 +194,9 @@ def login_to_bing(driver, email, password):
         logging.info("✅ Password entered.")
         driver.find_element(By.CSS_SELECTOR, "button[data-testid='primaryButton']").click()
         logging.info("🖱️ Clicked next after password.")
-        time.sleep(3)
+        time.sleep(10)
+        driver.find_element(By.XPATH, '//button[text()="Skip for now"]').click()
+        logging.info("✅ Bypassed passkey stuff")
         take_screenshot_in_memory(driver)
 
         logging.info("✅ Staying signed in...")
