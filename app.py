@@ -158,7 +158,7 @@ def take_screenshot_in_memory(driver):
         logging.error(f"❌ Failed to capture full-page screenshot: {e}")
         raise
 
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+
 
 def login_to_bing(driver, email, password):
     try:
