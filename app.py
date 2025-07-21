@@ -158,6 +158,8 @@ def take_screenshot_in_memory(driver):
         logging.error(f"❌ Failed to capture full-page screenshot: {e}")
         raise
 
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
+
 def login_to_bing(driver, email, password):
     try:
         logging.info("🔗 Navigating to Bing login page...")
@@ -178,42 +180,56 @@ def login_to_bing(driver, email, password):
 
         logging.info("🔑 Using password login...")
         try:
-            # Wait up to 15 seconds for the "Use your password" button
             use_pwd_btn = WebDriverWait(driver, 15).until(
-                EC.element_to_be_clickable((By.XPATH, "//span[text()='Use your password']"))
+                EC.element_to_be_clickable((By.XPATH, "//span[contains(text(), 'Use your password')]"))
             )
             use_pwd_btn.click()
             logging.info("🖱️ Clicked 'Use your password'.")
             time.sleep(2)
             take_screenshot_in_memory(driver)
         except TimeoutException:
-            logging.info("'Use your password' button not found after 15 seconds. Proceeding to password entry.")
+            logging.info("'Use your password' button not found. Proceeding directly to password entry.")
 
         logging.info("🔒 Entering password...")
         driver.find_element(By.ID, "passwordEntry").send_keys(password)
         logging.info("✅ Password entered.")
         driver.find_element(By.CSS_SELECTOR, "button[data-testid='primaryButton']").click()
         logging.info("🖱️ Clicked next after password.")
-        time.sleep(10)
-        driver.find_element(By.XPATH, '//button[text()="Skip for now"]').click()
-        logging.info("✅ Bypassed passkey stuff")
-        take_screenshot_in_memory(driver)
+        time.sleep(5)
 
+        # ✅ Attempt to bypass passkey screen if present
+        logging.info("🔍 Checking for bypass passkey option...")
+        try:
+            bypass_button = WebDriverWait(driver, 5).until(
+                EC.element_to_be_clickable((
+                    By.XPATH, "//button[contains(text(), 'Skip for now') or @data-test='skip-passkey' or @data-testid='skip-passkey']"
+                ))
+            )
+            bypass_button.click()
+            logging.info("✅ Bypassed passkey screen.")
+            take_screenshot_in_memory(driver)
+        except TimeoutException:
+            logging.info("⏭️ No passkey screen detected, continuing login.")
+
+        # ✅ Stay signed in
         logging.info("✅ Staying signed in...")
         WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, "button[data-testid='primaryButton']"))
         ).click()
         logging.info("🖱️ Clicked 'Stay signed in'.")
+
         logging.info("===Navigated To Main Page===")
         driver.get("https://bing.com/images/create")
         WebDriverWait(driver, 20).until(
-           EC.presence_of_element_located((By.ID, "gi_form_q"))
+            EC.presence_of_element_located((By.ID, "gi_form_q"))
         )
         take_screenshot_in_memory(driver)
+
     except Exception as e:
         logging.error(f"❌ Login failed: {e}")
         take_screenshot_in_memory(driver)
         raise
+
         
 def generate_images(driver, prompt):
     try:
