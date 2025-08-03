@@ -280,10 +280,10 @@ def login_to_bing(driver, email, password):
         logging.info("🖱️ Clicked 'Stay signed in'.")
 
         logging.info("===Navigated To Main Page===")
-        driver.get("https://bing.com/images/create")
-        WebDriverWait(driver, 20).until(
-            EC.presence_of_element_located((By.ID, "gi_form_q"))
-        )
+        #driver.get("https://bing.com/images/create")
+        #WebDriverWait(driver, 20).until(
+            #EC.presence_of_element_located((By.ID, "gi_form_q"))
+        #)
         take_screenshot_in_memory(driver)
 
     except Exception as e:
